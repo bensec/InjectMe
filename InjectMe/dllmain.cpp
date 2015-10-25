@@ -14,13 +14,18 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		OutputDebugString(TEXT("InjectMe: Dll attached"));
+		MessageBox(NULL, L"InjectMe: Dll attached", L"Moo", 0);
 
-		hFile = CreateFile(L"eicar.com", GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+		hFile = CreateFile(L"eicar.com", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
 			MessageBox(NULL, L"Invalid file handle!", L"Moo", 0);
 			break;
+		}
+		else
+		{
+			OutputDebugString(TEXT("CreateFile success"));
 		}
 
 		bErrorFlag = WriteFile(hFile, eicar, strlen(eicar), NULL, NULL);
@@ -30,10 +35,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 			MessageBox(NULL, L"WriteFile failed!", L"Moo", 0);
 			break;
 		}
+		else
+		{
+			OutputDebugString(TEXT("WriteFile success!"));
+		}
 
 		CloseHandle(hFile);
-
-		MessageBox(NULL, L"InjectMe: Dll attached", L"Moo", 0);
 		break;
 	case DLL_THREAD_ATTACH:
 		break;
